@@ -68,3 +68,14 @@ Cypress.Commands.add('createArticle', (title, description, body) => {
     });
   });
 });
+
+Cypress.Commands.add('register',
+  (email = 'riot@qa.team', username = 'riot', password = '12345Qwert!') => {
+    cy.request('POST', '/api/users', {
+      user: {
+        email,
+        username,
+        password
+      }
+    });
+  });
