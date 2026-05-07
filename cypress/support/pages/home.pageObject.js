@@ -1,4 +1,4 @@
-import PageObject from '../pageObject.js';
+import PageObject from './pageObject.js';
 import UserObj from '../userObject.js';
 
 class HomePageObject extends PageObject {

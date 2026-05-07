@@ -1,5 +1,5 @@
 // import { ArgumentError } from '../customCommands.js';
-import PageObject from '../pageObject.js';
+import PageObject from './pageObject.js';
 import HomePageObject from './home.pageObject.js';
 
 class NewArticlePageObject extends PageObject {

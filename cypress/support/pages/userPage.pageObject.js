@@ -1,4 +1,4 @@
-import PageObject from '../PageObject.js';
+import PageObject from './pageObject.js';
 import { ArgumentError } from '../customComands.js';
 
 class UserPageObject extends PageObject {
