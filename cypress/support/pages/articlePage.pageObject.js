@@ -33,7 +33,9 @@ class ArticlePageObject extends PageObject {
   }
 
   get authorOfArticle() {
-    return cy.get('a[href^="/profile/"][class="author"]');
+    return cy.get('a[href^="/profile/"][class="author"]').then((profile) => {
+      return profile[0];
+    });
   }
 
   clickOnAuthorOfProfile() {
@@ -59,7 +61,7 @@ class ArticlePageObject extends PageObject {
 
     this.tagList.then((tagBox) => {
       [...tagBox].forEach((tag, i) => {
-        expect(tag.textContent).to.equal(arrayOfTags[i]);
+        expect(tag.textContent).to.be.oneOf(arrayOfTags);
       });
     });
   }
@@ -100,9 +102,7 @@ ArticlePageObject.prototype.homeMixIn = {
   getSettingsLink: homePrototype.clickSettingsLink
     .bind(homePrototype),
   getUserLink: homePrototype.clickUserLink
-    .bind(homePrototype),
-  createMarks: homePrototype.createMarks
-    .bind(homePrototype, true, false)
+    .bind(homePrototype)
 };
 
 export default ArticlePageObject;

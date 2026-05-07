@@ -1,6 +1,5 @@
-// HomePageObject
 import PageObject from '../pageObject.js';
-import UserPageObject from './userPage.pageObject.js';
+import UserObj from '../userObject.js';
 
 class HomePageObject extends PageObject {
   url = '/#/';
@@ -83,7 +82,7 @@ class HomePageObject extends PageObject {
   }
 }
 
-const userPagePrototype = UserPageObject.prototype;
+const userPagePrototype = UserObj.prototype;
 
 HomePageObject.prototype.userPageMixIn = {
   openArticle: userPagePrototype.openArticle

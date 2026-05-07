@@ -1,66 +1,16 @@
-import { ArgumentError } from '../customCommands.js';
+// import { ArgumentError } from '../customCommands.js';
 import PageObject from '../pageObject.js';
 import HomePageObject from './home.pageObject.js';
-import ArticlePageObject from './articlePage.pageObject.js';
 
 class NewArticlePageObject extends PageObject {
   url = '/editor';
-  static marks = {
-    articleTittleField: 'exist',
-    articleAboutField: 'exist',
-    articleBodyTextArea: 'exist',
-    articleTagsField: 'exist',
-    articlePublishButton: 'exist'
-  };
-
-  createMarks() {
-    for (const mark of Object.keys(NewArticlePageObject.marks)) {
-      switch (true) {
-        case mark === 'articlePublishButton':
-          cy.get('form button')
-            .then((button) => {
-              if (button.text().includes('Update Article')) {
-                [...button].some((btn) => {
-                  const isTarget = btn.textContent === 'Update Article';
-                  const isDataCyCurrent = btn.hasAttribute('data-cy');
-
-                  if (isTarget && !isDataCyCurrent) {
-                    btn.setAttribute('data-cy', 'article-update-newArticle');
-
-                    return true;
-                  }
-
-                  return false;
-                });
-              } else if (button.text().includes('Publish Article')) {
-                [...button].some((btn) => {
-                  const isTarget = btn.textContent === 'Publish Article';
-                  const isDataCyCurrent = btn.hasAttribute('data-cy');
-
-                  if (isTarget && !isDataCyCurrent) {
-                    btn.setAttribute('data-cy', 'article-publish-newArticle');
-
-                    return true;
-                  }
-                  return false;
-                });
-              } else {
-                throw new Error(`The submit button of the form on the New Article Page ` +
-                  `doesn't contain "Update Article" or "Publish Article" text`
-                );
-              }
-            });
-          break;
-      }
-    }
-  };
 
   get articleTittleField() {
     return cy.get('form input[placeholder="Article Title"]');
   }
 
   get articleAboutField() {
-    cy.get('form input[placeholder^="What\'s"]');
+    return cy.get('form input[placeholder^="What\'s"]');
   }
 
   get articleBodyTextArea() {
@@ -72,13 +22,12 @@ class NewArticlePageObject extends PageObject {
   }
 
   get articleSubmitButton() {
-    return cy.getByDataCy(
-      'article-publish-newArticle', 'article-update-newArticle');
+    return cy.get('form button').contains(/Update Article|Publish Article/);
   }
 
   insertArticleTittle(text) {
     if (typeof text !== 'string') {
-      throw new ArgumentError('The "text" argument must be String');
+      throw new Error('The "text" argument must be String');
     }
 
     this.articleTittleField
@@ -89,7 +38,7 @@ class NewArticlePageObject extends PageObject {
 
   insertArticleAbout(text) {
     if (typeof text !== 'string') {
-      throw new ArgumentError('The "text" argument must be String');
+      throw new Error('The "text" argument must be String');
     }
 
     this.articleAboutField
@@ -100,7 +49,7 @@ class NewArticlePageObject extends PageObject {
 
   insertArticleBody(text) {
     if (typeof text !== 'string') {
-      throw new ArgumentError('The "text" argument must be String');
+      throw new Error('The "text" argument must be String');
     }
 
     this.articleBodyTextArea
@@ -118,7 +67,7 @@ class NewArticlePageObject extends PageObject {
       : textOrArray.length;
 
     if (!(isString || isArray)) {
-      throw new ArgumentError('The "text" argument must be String or Array');
+      throw new Error('The "text" argument must be String or Array');
     }
 
     for (let i = 0; i < iterationLimit; i++) { // interation dependend on type of data (String or Array)
@@ -151,7 +100,6 @@ class NewArticlePageObject extends PageObject {
       .click();
     this.articleSubmitButton
       .should('not.be.disabled');
-    this.articleMixIn.createMarks(true);
   }
 
   getAllTags() {
@@ -169,7 +117,6 @@ class NewArticlePageObject extends PageObject {
 }
 
 const homePrototype = HomePageObject.prototype;
-const articlePrototype = ArticlePageObject.prototype;
 
 NewArticlePageObject.prototype.homeMixIn = {
   getLogo: homePrototype.clickLogo
@@ -181,13 +128,7 @@ NewArticlePageObject.prototype.homeMixIn = {
   getSettingsLink: homePrototype.clickSettingsLink
     .bind(homePrototype),
   getUserLink: homePrototype.clickUserLink
-    .bind(homePrototype),
-  createMarks: homePrototype.createMarks
     .bind(homePrototype)
-};
-
-NewArticlePageObject.prototype.articleMixIn = {
-  createMarks: articlePrototype.createMarks
 };
 
 export default NewArticlePageObject;
